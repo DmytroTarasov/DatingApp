@@ -18,6 +18,11 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            // configure a cloudinary settings so we have a corresponding class
+            // (and we can access the properties - ApiKey, ApiSecret etc.)
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+
+            services.AddScoped<IPhotoService, PhotoService>();
 
             return services;
         }
