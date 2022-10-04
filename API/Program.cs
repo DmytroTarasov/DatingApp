@@ -1,4 +1,6 @@
 using API.Data;
+using API.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API
@@ -12,8 +14,10 @@ namespace API
             var services = scope.ServiceProvider;
             try {
                 var context = services.GetRequiredService<DataContext>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
                 await context.Database.MigrateAsync(); // dotnet ef database update
-                await Seed.SeedUsers(context);
+                await Seed.SeedUsers(userManager, roleManager);
             } catch (Exception ex) {
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occured during migration");

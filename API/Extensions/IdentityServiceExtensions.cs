@@ -1,5 +1,8 @@
 using System.Text;
+using API.Data;
+using API.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions
@@ -19,6 +22,22 @@ namespace API.Extensions
                         ValidateAudience = false
                     };
                 });
+
+            services.AddIdentityCore<AppUser>(opt =>
+                {
+                    opt.Password.RequireNonAlphanumeric = false;
+                })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddRoleValidator<RoleValidator<AppRole>>()
+                .AddEntityFrameworkStores<DataContext>();
+            
+            services.AddAuthorization(opt => 
+            {
+                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+            });
 
             return services;
         }

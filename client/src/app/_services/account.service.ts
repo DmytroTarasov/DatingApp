@@ -32,6 +32,11 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
+    user.roles = [];
+    const roles = this.getDecodedToken(user.token).role;
+    // in case the user has one role, the API returns it as a string
+    // in case the user has more than one role, the API returns them as an array
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
@@ -44,5 +49,9 @@ export class AccountService {
         }
       })
     );
+  }
+
+  getDecodedToken(token: string) {
+    return JSON.parse(atob(token.split('.')[1]));
   }
 }
