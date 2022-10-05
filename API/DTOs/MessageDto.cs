@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace API.DTOs
 {
     public class MessageDto
@@ -12,5 +14,13 @@ namespace API.DTOs
         public string Content { get; set; }
         public DateTime? DateRead { get; set; }
         public DateTime MessageSent { get; set; }
+
+        // we mark these props with 'JsonIgnore' so they won't be sent to the client but we will be able
+        // to access them inside a MessageRepository, for instance
+        [JsonIgnore]
+        public bool SenderDeleted { get; set; }
+
+        [JsonIgnore]
+        public bool RecipientDeleted { get; set; }
     }
 }

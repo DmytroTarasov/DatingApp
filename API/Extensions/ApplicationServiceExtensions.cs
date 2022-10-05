@@ -17,7 +17,6 @@ namespace API.Extensions
             });
 
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             // configure a cloudinary settings so we have a corresponding class
             // (and we can access the properties - ApiKey, ApiSecret etc.)
@@ -25,9 +24,8 @@ namespace API.Extensions
 
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<LogUserActivity>();
-            services.AddScoped<ILikesRepository, LikesRepository>();
-            services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddSingleton<PresenceTracker>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
