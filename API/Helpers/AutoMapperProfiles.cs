@@ -22,6 +22,9 @@ namespace API.Helpers
                     opt.MapFrom(src => src.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
                 .ForMember(dest => dest.RecipientPhotoUrl, opt => 
                     opt.MapFrom(src => src.Recipient.Photos.FirstOrDefault(x => x.IsMain).Url));
+            // when we return a DateTime to the client, this DateTime will have a 'Z' at the end so the 
+            // browsers can correctly treat this time
+            CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
         }
     }
 }
